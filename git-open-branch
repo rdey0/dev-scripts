@@ -1,0 +1,34 @@
+#!/bin/bash
+
+# Get the remote URL
+remote_url=$(git config --get remote.origin.url)
+
+# Extract the GitHub username and repository name
+if [[ $remote_url == *"@"* ]]; then
+    # SSH URL
+    repo_info=$(echo $remote_url | sed -E 's/.*:(.+)\/(.+)\.git/\1 \2/')
+else
+    # HTTPS URL
+    repo_info=$(echo $remote_url | sed -E 's/.*github\.com\/(.+)\/(.+)\.git/\1 \2/')
+fi
+
+username=$(echo $repo_info | cut -d' ' -f1)
+repo_name=$(echo $repo_info | cut -d' ' -f2)
+
+# Get the current branch name
+branch=$(git rev-parse --abbrev-ref HEAD)
+
+# Construct the GitHub URL
+github_url="https://github.com/$username/$repo_name/tree/$branch"
+
+# Open the URL in the default browser
+if [[ "$OSTYPE" == "linux-gnu"* ]]; then
+    xdg-open "$github_url"
+elif [[ "$OSTYPE" == "darwin"* ]]; then
+    open "$github_url"
+elif [[ "$OSTYPE" == "msys" || "$OSTYPE" == "win32" ]]; then
+    start "$github_url"
+else
+    echo "Unsupported operating system. Please open this URL manually:"
+    echo "$github_url"
+fi
