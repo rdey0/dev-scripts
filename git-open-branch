@@ -1,4 +1,5 @@
 #!/bin/bash
+# Open the GitHub URL for the current branch in the default browser
 
 # Get the remote URL
 remote_url=$(git config --get remote.origin.url)
