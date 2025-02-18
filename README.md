@@ -1,5 +1,3 @@
-## Dev Scripts
-
 Scripts that make development a little easier
 
 ## Setup
